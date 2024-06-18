@@ -8,6 +8,6 @@ namespace RPOS.Domain.Entities
         {
             Products = new List<Product>();
         }
-        public ICollection<Product> Products { get; set; } = null!;
+        public virtual ICollection<Product> Products { get; set; } = null!;
     }
 }

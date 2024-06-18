@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Persistences\Contexts\Configurations\" />
-    <Folder Include="Persistences\Interfaces\" />
     <Folder Include="Persistences\Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RPOS.Domain\RPOS.Domain.csproj" />
+    <ProjectReference Include="..\RPOS.Utilities\RPOS.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
