@@ -1,0 +1,6 @@
+@RPOS.API_HostAddress = http://localhost:5162
+
+GET {{RPOS.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

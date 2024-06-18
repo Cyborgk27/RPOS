@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RPOS.Domain.Entities;
 using System.Reflection;
 
 namespace RPOS.Infrastructure.Persistences.Contexts
 {
-    public partial class RPOSContext : IdentityDbContext
+    public partial class RPOSContext : IdentityDbContext<IdentityUser>
     {
         public RPOSContext()
         { 
@@ -24,6 +25,7 @@ namespace RPOS.Infrastructure.Persistences.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
