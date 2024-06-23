@@ -9,9 +9,13 @@ namespace RPOS.Infrastructure.Persistences.Contexts.Configurations
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey(x => x.Id);
+
             builder.Property(x => x.Id)
                 .HasColumnName("CategoryId");
-            builder.Property(x => x.Name).HasMaxLength(30);
+
+            builder.HasMany(c => c.Products)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId);
         }
     }
 }

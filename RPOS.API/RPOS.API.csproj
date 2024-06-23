@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RPOS.Application\RPOS.Application.csproj" />
     <ProjectReference Include="..\RPOS.Infrastructure\RPOS.Infrastructure.csproj" />
   </ItemGroup>
 

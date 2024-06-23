@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RPOS.Infrastructure.Persistences.Contexts;
 
@@ -10,9 +11,11 @@ using RPOS.Infrastructure.Persistences.Contexts;
 namespace RPOS.Infrastructure.Migrations
 {
     [DbContext(typeof(RPOSContext))]
-    partial class RPOSContextModelSnapshot : ModelSnapshot
+    [Migration("20240622040812_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,44 +216,23 @@ namespace RPOS.Infrastructure.Migrations
 
             modelBuilder.Entity("RPOS.Domain.Entities.Address", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("AddressId");
-
-                    b.Property<DateTime>("AuditCreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditCreateUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditDeleteDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditDeleteUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditUpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditUpdateUser")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstStreet")
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecondStreet")
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("AddressId");
 
                     b.HasIndex("RestaurantId")
                         .IsUnique();
@@ -260,68 +242,30 @@ namespace RPOS.Infrastructure.Migrations
 
             modelBuilder.Entity("RPOS.Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("CategoryId");
-
-                    b.Property<DateTime>("AuditCreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditCreateUser")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("AuditDeleteDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditDeleteUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditUpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditUpdateUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("CategoryDescription")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("RPOS.Domain.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ProductId");
-
-                    b.Property<DateTime>("AuditCreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditCreateUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditDeleteDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditDeleteUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditUpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditUpdateUser")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
@@ -333,11 +277,10 @@ namespace RPOS.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<float>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("REAL");
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("INTEGER");
@@ -345,7 +288,7 @@ namespace RPOS.Infrastructure.Migrations
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
@@ -356,35 +299,14 @@ namespace RPOS.Infrastructure.Migrations
 
             modelBuilder.Entity("RPOS.Domain.Entities.Restaurant", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RestaurantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("RestaurantId");
-
-                    b.Property<DateTime>("AuditCreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditCreateUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditDeleteDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditDeleteUser")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("AuditUpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("AuditUpdateUser")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<float>("Rating")
@@ -393,7 +315,7 @@ namespace RPOS.Infrastructure.Migrations
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("RestaurantId");
 
                     b.ToTable("Restaurants");
                 });

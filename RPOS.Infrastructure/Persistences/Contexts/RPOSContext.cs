@@ -19,9 +19,10 @@ namespace RPOS.Infrastructure.Persistences.Contexts
 
         }
 
+        public virtual DbSet<Restaurant> Restaurants { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<MenuForDay> MenuForDay { get; set; } = null!;
+        public virtual DbSet<Address> Addresses { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

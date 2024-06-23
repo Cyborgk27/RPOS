@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RPOS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,14 +56,8 @@ namespace RPOS.Infrastructure.Migrations
                 {
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 30, nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    AuditCreateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditCreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditUpdateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditUpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditDeleteUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditDeleteDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CategoryName = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryDescription = table.Column<string>(type: "TEXT", nullable: false),
                     State = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -72,22 +66,19 @@ namespace RPOS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuForDay",
+                name: "Restaurants",
                 columns: table => new
                 {
-                    MenuId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RestaurantId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AuditCreateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditCreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditUpdateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditUpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditDeleteUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditDeleteDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Rating = table.Column<float>(type: "REAL", nullable: false),
                     State = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuForDay", x => x.MenuId);
+                    table.PrimaryKey("PK_Restaurants", x => x.RestaurantId);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,39 +188,62 @@ namespace RPOS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RestaurantId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FirstStreet = table.Column<string>(type: "TEXT", nullable: true),
+                    SecondStreet = table.Column<string>(type: "TEXT", nullable: true),
+                    State = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                    table.ForeignKey(
+                        name: "FK_Addresses_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    RestaurantId = table.Column<int>(type: "INTEGER", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MenuId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<float>(type: "REAL", nullable: true),
-                    AuditCreateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditCreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditUpdateUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditUpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AuditDeleteUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuditDeleteDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<float>(type: "REAL", nullable: false),
                     State = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_PRODUCTS_CATEGORIES",
+                        name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "CategoryId");
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_MenuForDay_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "MenuForDay",
-                        principalColumn: "MenuId",
-                        onDelete: ReferentialAction.SetNull);
+                        name: "FK_Products_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "RestaurantId",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_RestaurantId",
+                table: "Addresses",
+                column: "RestaurantId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -274,14 +288,17 @@ namespace RPOS.Infrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_MenuId",
+                name: "IX_Products_RestaurantId",
                 table: "Products",
-                column: "MenuId");
+                column: "RestaurantId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -310,7 +327,7 @@ namespace RPOS.Infrastructure.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "MenuForDay");
+                name: "Restaurants");
         }
     }
 }

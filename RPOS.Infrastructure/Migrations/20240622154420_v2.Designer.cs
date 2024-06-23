@@ -11,8 +11,8 @@ using RPOS.Infrastructure.Persistences.Contexts;
 namespace RPOS.Infrastructure.Migrations
 {
     [DbContext(typeof(RPOSContext))]
-    [Migration("20240618043228_init")]
-    partial class init
+    [Migration("20240622154420_v2")]
+    partial class v2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,53 @@ namespace RPOS.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("RPOS.Domain.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("AddressId");
+
+                    b.Property<DateTime>("AuditCreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AuditCreateUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("AuditDeleteDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AuditDeleteUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("AuditUpdateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AuditUpdateUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstStreet")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SecondStreet")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("State")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId")
+                        .IsUnique();
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("RPOS.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -224,26 +271,27 @@ namespace RPOS.Infrastructure.Migrations
                     b.Property<DateTime>("AuditCreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditCreateUserId")
+                    b.Property<int>("AuditCreateUser")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AuditDeleteDate")
+                    b.Property<DateTime?>("AuditDeleteDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditDeleteUserId")
+                    b.Property<int?>("AuditDeleteUser")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AuditUpdateDate")
+                    b.Property<DateTime?>("AuditUpdateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditUpdateUserId")
+                    b.Property<int?>("AuditUpdateUser")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(30)
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("State")
@@ -252,39 +300,6 @@ namespace RPOS.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("RPOS.Domain.Entities.MenuForDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("MenuId");
-
-                    b.Property<DateTime>("AuditCreateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditCreateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AuditDeleteDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditDeleteUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("AuditUpdateDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("AuditUpdateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("State")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MenuForDay");
                 });
 
             modelBuilder.Entity("RPOS.Domain.Entities.Product", b =>
@@ -297,35 +312,38 @@ namespace RPOS.Infrastructure.Migrations
                     b.Property<DateTime>("AuditCreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditCreateUserId")
+                    b.Property<int>("AuditCreateUser")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AuditDeleteDate")
+                    b.Property<DateTime?>("AuditDeleteDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditDeleteUserId")
+                    b.Property<int?>("AuditDeleteUser")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AuditUpdateDate")
+                    b.Property<DateTime?>("AuditUpdateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AuditUpdateUserId")
+                    b.Property<int?>("AuditUpdateUser")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("MenuId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<float?>("Price")
-                        .HasColumnType("REAL");
+                    b.Property<float>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
@@ -334,9 +352,53 @@ namespace RPOS.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("MenuId");
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("RPOS.Domain.Entities.Restaurant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("RestaurantId");
+
+                    b.Property<DateTime>("AuditCreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AuditCreateUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("AuditDeleteDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AuditDeleteUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("AuditUpdateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("AuditUpdateUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Rating")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("State")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -390,23 +452,34 @@ namespace RPOS.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RPOS.Domain.Entities.Address", b =>
+                {
+                    b.HasOne("RPOS.Domain.Entities.Restaurant", "Restaurant")
+                        .WithOne("Address")
+                        .HasForeignKey("RPOS.Domain.Entities.Address", "RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+                });
+
             modelBuilder.Entity("RPOS.Domain.Entities.Product", b =>
                 {
                     b.HasOne("RPOS.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_PRODUCTS_CATEGORIES");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("RPOS.Domain.Entities.MenuForDay", "MenuForDay")
+                    b.HasOne("RPOS.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("Products")
-                        .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("MenuForDay");
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("RPOS.Domain.Entities.Category", b =>
@@ -414,8 +487,11 @@ namespace RPOS.Infrastructure.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("RPOS.Domain.Entities.MenuForDay", b =>
+            modelBuilder.Entity("RPOS.Domain.Entities.Restaurant", b =>
                 {
+                    b.Navigation("Address")
+                        .IsRequired();
+
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618

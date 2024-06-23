@@ -1,17 +1,21 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using RPOS.Infrastructure.Persistences.Contexts;
+using RPOS.Infrastructure.Extensions;
+using RPOS.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var Configuration = builder.Configuration;
 // Add services to the container.
-builder.Services.AddDbContext<RPOSContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"),
-    b => b.MigrationsAssembly("RPOS.Infrastructure")));
 
-builder.Services.AddIdentity<IdentityUser,IdentityRole>()
-    .AddEntityFrameworkStores<RPOSContext>()
-    .AddDefaultTokenProviders();
+var Cors = "Cors";
+
+builder.Services.AddInjectionInfrastructure(Configuration);
+builder.Services.AddInjectionApplication(Configuration);
+
+builder.Services.AddAuthorization();
+
+//builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+//    .AddEntityFrameworkStores<RPOSContext>()
+//    .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -26,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 
